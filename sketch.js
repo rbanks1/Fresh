@@ -127,7 +127,7 @@ function drawPetal(){
 function mousePressed() {}
 
 function keyReleased() {
-  if (key == "s" || key == "S") saveCanvas(gd.timestamp(), "png");
+  if (key == "s" || key == "S") saveCanvas("Tulip", "png");
   if (key == " ") noiseSeed(floor(random(100000)));
   if (key == "g" || key == "G") {
     if (guiVisible) {
