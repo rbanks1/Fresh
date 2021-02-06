@@ -1,4 +1,6 @@
-// M_1_4_01
+// Starting with Example M_1_4_01 From Creative Coding
+// This will eventually become a flower, or something
+// Useful page: https://github.com/processing/p5.js/wiki/Getting-started-with-WebGL-in-p5
 //
 // Generative Gestaltung – Creative Coding im Web
 // ISBN: 978-3-87439-902-9, First Edition, Hermann Schmidt, Mainz, 2018
