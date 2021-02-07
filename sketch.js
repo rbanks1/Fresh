@@ -1,4 +1,8 @@
 // FRESH. Copyright 2012. Richard Banks
+// Good general P5JS 3D reference
+// https://github.com/processing/p5.js/wiki/Getting-started-with-WebGL-in-p5
+// Example from Creative Coding of noise+3D landscape
+// https://editor.p5js.org/generative-design/sketches/M_1_4_01
 
 var xoff = 0.0;
 var cam;
@@ -14,6 +18,13 @@ var tulipGapStep = 10;
 
 var planeSize;
 var gui;
+
+var myFont;
+
+
+function preload() {
+  myFont = loadFont('assets/segoeui.ttf');
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
@@ -36,9 +47,12 @@ function draw() {
   directionalLight(250, 250, 250, height / 2, width / 2, -250);
   camera(mouseX*3, -1500, mouseX*3, 0, -1000, 0, 0, 1, 0);
 
+  drawInstructions();
+
   xoff = xoff + 0.1;
   let n = noise(xoff) * 10;
 
+  // Draw base plane
   push();
   rotateX((2 * PI) / 4);
   fill(color("white"));
@@ -124,11 +138,29 @@ function drawPetal(){
   endShape();
 }
 
-function mousePressed() {}
-
 function keyReleased() {
+
+  if (keyCode == 187) { // '+'
+    numberOfTulipsOnEachSide+=numberOfTulipsOnEachSideStep;
+    if (numberOfTulipsOnEachSide > numberOfTulipsOnEachSideMax) numberOfTulipsOnEachSide = numberOfTulipsOnEachSideMax;
+    gui.prototype.setValue("numberOfTulipsOnEachSide", numberOfTulipsOnEachSide);
+  }
+  if (keyCode == 189) { // '-'
+    numberOfTulipsOnEachSide-=numberOfTulipsOnEachSideStep;
+    if (numberOfTulipsOnEachSide < numberOfTulipsOnEachSideMin) numberOfTulipsOnEachSide = numberOfTulipsOnEachSideMin;
+    gui.prototype.setValue("numberOfTulipsOnEachSide", numberOfTulipsOnEachSide);
+  }
+  if (keyCode == 221){
+    tulipGap += tulipGapStep;
+    if (tulipGap > tulipGapMax) tulipGap = tulipGapMax;
+    gui.prototype.setValue("tulipGap", tulipGap);
+  }
+  if (keyCode == 219){
+    tulipGap -= tulipGapStep;
+    if (tulipGap < tulipGapMin) tulipGap = tulipGapMin;
+    gui.prototype.setValue("tulipGap", tulipGap);
+  }
   if (key == "s" || key == "S") saveCanvas("Tulip", "png");
-  if (key == " ") noiseSeed(floor(random(100000)));
   if (key == "g" || key == "G") {
     if (guiVisible) {
       gui.hide();
@@ -138,4 +170,24 @@ function keyReleased() {
       guiVisible = true;
     }
   }
+}
+
+// ** UTILITY **
+//----------------------------
+
+// Write the instructions in the top-left of the page
+function drawInstructions(){
+  push();
+  fill(50);
+  noStroke();
+  textFont(myFont);
+  textSize(18);
+  textAlign(RIGHT, TOP);
+  var textX = (numberOfTulipsOnEachSide-1) * tulipGap + (tulipGap*2);
+  rotateY((2*PI)/5);
+  text("+|-: Add/Remove Tulips", -textX, -1140);
+  text("[ ]: Increase/Decrease Spacing", -textX, -1120);
+  text("S: Save Canvas", -textX, -1100);
+  text("G: Show/Hide Settings", -textX, -1080);
+  pop();
 }
